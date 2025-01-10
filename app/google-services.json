@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "846030268750",
+    "project_id": "cloud-gus-firebase",
+    "storage_bucket": "cloud-gus-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846030268750:android:61fd026c0badb2705f561f",
+        "android_client_info": {
+          "package_name": "br.com.tagueamento"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATZ81706ja3wAaYZNwTOUKXdmA1TyYRSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
