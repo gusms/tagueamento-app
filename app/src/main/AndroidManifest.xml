@@ -16,14 +16,39 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Tagueamento">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Este filtro captura o domínio principal e abre a MainActivity -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="www.tagueamento.com.br"
+                    android:pathPrefix="/" />
+            </intent-filter>
         </activity>
-        <activity android:name=".SegundaActivity" />
-        <activity android:name=".WebViewActivity" />
+
+        <!-- Adicione esta activity para o caminho específico -->
+        <activity
+            android:name=".WebViewActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="www.tagueamento.com.br"
+                    android:path="/index.html" />
+            </intent-filter>
+        </activity>
         <activity android:name=".GabrielActivity" />
     </application>
 
