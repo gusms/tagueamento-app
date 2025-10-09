@@ -16,11 +16,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -31,10 +33,32 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         firebaseAnalytics = Firebase.analytics
 
         setContent {
+            var appInstanceId by remember { mutableStateOf<String?>(null) }
+            var sessionId by remember { mutableStateOf<Long?>(null) }
+
+            // Recupera o App Instance ID e o Session ID uma vez ao iniciar a tela
+            LaunchedEffect(Unit) {
+                firebaseAnalytics.appInstanceId
+                    .addOnCompleteListener(OnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            appInstanceId = task.result
+                        } else {
+                            appInstanceId = "Erro ao obter ID"
+                        }
+                    })
+
+                firebaseAnalytics.sessionId
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            sessionId = task.result
+                        }
+                    }
+            }
+
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -94,6 +118,24 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    // Exibe o App Instance ID
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "App Instance ID: ${appInstanceId ?: "Carregando..."}",
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Session ID: ${sessionId?.toString() ?: "Carregando..."}",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     ComprarButton(firebaseAnalytics)
                 }
             }
@@ -133,4 +175,4 @@ fun ComprarButton(firebaseAnalytics: FirebaseAnalytics) {
     ) {
         Text("Comprar")
     }
-} 
+}
