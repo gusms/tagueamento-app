@@ -63,6 +63,37 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    Button(
+                        onClick = {
+                            val bundle = Bundle().apply {
+                                putString("origem", "main_activity")
+                                putString("destino", "webview_tagueamento")
+                                putString("level_difficulty", "1");
+                            }
+                            firebaseAnalytics.logEvent("navegacao_webview", bundle)
+                            startActivity(Intent(this@MainActivity, WebViewActivity::class.java))
+                        }
+                    ) {
+                        Text("Abrir Tagueamento Web")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            val bundle = Bundle().apply {
+                                putString("origem", "main_activity")
+                                putString("destino", "gabriel_activity")
+                            }
+                            firebaseAnalytics.logEvent("navegacao_gabriel", bundle)
+                            startActivity(Intent(this@MainActivity, GabrielActivity::class.java))
+                        }
+                    ) {
+                        Text("Ir para Tela do Gabriel")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     ComprarButton(firebaseAnalytics)
                 }
             }
