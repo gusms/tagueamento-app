@@ -35,6 +35,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Adicione esta tag para declarar a SegundaActivity -->
+        <activity
+            android:name=".SegundaActivity"
+            android:exported="false" />
+
         <!-- Adicione esta activity para o caminho específico -->
         <activity
             android:name=".WebViewActivity"
@@ -49,7 +54,12 @@
                     android:path="/index.html" />
             </intent-filter>
         </activity>
-        <activity android:name=".GabrielActivity" />
+
+        <!-- Verifique se a GabrielActivity também está declarada -->
+        <activity
+            android:name=".GabrielActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
