@@ -101,6 +101,20 @@ class MainActivity : ComponentActivity() {
                         Text("Abrir Tagueamento Web")
                     }
 
+                    Button(
+                        onClick = {
+                            val bundle = Bundle().apply {
+                                putString("origem", "main_activity")
+                                putString("destino", "webview_havaianas")
+                                putString("level_difficulty", "1");
+                            }
+                            firebaseAnalytics.logEvent("navegacao_webview_hava", bundle)
+                            startActivity(Intent(this@MainActivity, WebViewActivityHavaianas::class.java))
+                        }
+                    ) {
+                        Text("Abrir Havaianas Web")
+                    }
+
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
