@@ -178,8 +178,8 @@ fun WebViewContentb(
                 // Define um User-Agent personalizado
                 settings.userAgentString = "webview-app"
                 
-                // Adiciona a interface JavaScript ao WebView, nomeando-a "channel_shopify_app"
-                addJavascriptInterface(webAppInterface, "channel_shopify_app")
+                // Adiciona a interface JavaScript ao WebView, nomeando-a "channelGTM"
+                addJavascriptInterface(webAppInterface, "channelGTM")
 
                 val cookieManager = CookieManager.getInstance()
                 cookieManager.setAcceptCookie(true)
