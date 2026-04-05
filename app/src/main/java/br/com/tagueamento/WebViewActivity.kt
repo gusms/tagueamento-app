@@ -85,7 +85,7 @@ class WebViewActivity : ComponentActivity() {
         firebaseAnalytics = Firebase.analytics
 
         // Pega a URL do intent que abriu a activity
-        val urlToLoad = intent.data?.toString() ?: "https://www.tagueamento.com.br"
+        val urlToLoad = intent.data?.toString() ?: "https://teste.tagueamento.com.br/webview.html"
 
         setContent {
             var showDialog by remember { mutableStateOf(false) }
