@@ -69,4 +69,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.appsflyer:af-android-sdk:6.12.1' 
+    implementation 'com.android.installreferrer:installreferrer:2.2'
 }

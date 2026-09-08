@@ -2,6 +2,7 @@ package br.com.tagueamento
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.appsflyer.AFInAppEventParameterName
+import com.appsflyer.AFInAppEventType
+import com.appsflyer.AppsFlyerLib
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -35,6 +39,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         firebaseAnalytics = Firebase.analytics
+
+        // Configuração do AppsFlyer
+        val afDevKey = "nuNFqK52n3Rd2TqEEkL7gR" // Substitua pela sua chave do dashboard AppsFlyer
+
+
+        AppsFlyerLib.getInstance().init(afDevKey, null, this)
+        AppsFlyerLib.getInstance().start(this)
+        AppsFlyerLib.getInstance().setDebugLog(true) // Opcional: para validar nos logs
 
         setContent {
             var appInstanceId by remember { mutableStateOf<String?>(null) }
@@ -183,6 +195,16 @@ fun ComprarButton(firebaseAnalytics: FirebaseAnalytics) {
             
             // Envia o evento de purchase
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.PURCHASE, bundle)
+
+            // Envia o evento para o AppsFlyer
+            val afPurchaseValues = mutableMapOf<String, Any>()
+            afPurchaseValues[AFInAppEventParameterName.REVENUE] = 99.90
+            afPurchaseValues[AFInAppEventParameterName.CURRENCY] = "BRL"
+            afPurchaseValues[AFInAppEventParameterName.QUANTITY] = 1
+            afPurchaseValues[AFInAppEventParameterName.CONTENT_ID] = "SKU_123"
+            afPurchaseValues[AFInAppEventParameterName.CONTENT_TYPE] = "Vestuário"
+            
+            AppsFlyerLib.getInstance().logEvent(context, AFInAppEventType.PURCHASE, afPurchaseValues)
             
             Toast.makeText(context, "Pedido realizado com items", Toast.LENGTH_SHORT).show()
         }
