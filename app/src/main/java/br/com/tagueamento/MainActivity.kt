@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.adjust.sdk.Adjust
+import com.adjust.sdk.AdjustEvent
 import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
 import com.appsflyer.AppsFlyerLib
@@ -174,6 +176,8 @@ fun ComprarButton(firebaseAnalytics: FirebaseAnalytics) {
     val context = LocalContext.current
     Button(
         onClick = {
+            val transactionId = "${System.currentTimeMillis()}"
+
             // Cria o bundle com os dados do item
             val itemBundle = Bundle().apply {
                 putString(FirebaseAnalytics.Param.ITEM_ID, "SKU_123")
@@ -187,12 +191,12 @@ fun ComprarButton(firebaseAnalytics: FirebaseAnalytics) {
             val bundle = Bundle().apply {
                 putString(FirebaseAnalytics.Param.CURRENCY, "BRL")
                 putDouble(FirebaseAnalytics.Param.VALUE, 99.90)
-                putString(FirebaseAnalytics.Param.TRANSACTION_ID, "${System.currentTimeMillis()}")
+                putString(FirebaseAnalytics.Param.TRANSACTION_ID, transactionId)
                 putString(FirebaseAnalytics.Param.PAYMENT_TYPE, "CREDIT_CARD")
                 // Adiciona o array de itens
                 putParcelableArray(FirebaseAnalytics.Param.ITEMS, arrayOf(itemBundle))
             }
-            
+
             // Envia o evento de purchase
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.PURCHASE, bundle)
 
@@ -203,9 +207,17 @@ fun ComprarButton(firebaseAnalytics: FirebaseAnalytics) {
             afPurchaseValues[AFInAppEventParameterName.QUANTITY] = 1
             afPurchaseValues[AFInAppEventParameterName.CONTENT_ID] = "SKU_123"
             afPurchaseValues[AFInAppEventParameterName.CONTENT_TYPE] = "Vestuário"
-            
+
             AppsFlyerLib.getInstance().logEvent(context, AFInAppEventType.PURCHASE, afPurchaseValues)
-            
+
+            // Envia o evento de purchase para a Adjust
+            val adjustPurchaseEvent = AdjustEvent("jshbd1")
+            adjustPurchaseEvent.setRevenue(99.90, "BRL")
+            adjustPurchaseEvent.setDeduplicationId(transactionId)
+            adjustPurchaseEvent.addCallbackParameter("content_id", "SKU_123")
+            adjustPurchaseEvent.addCallbackParameter("content_type", "Vestuário")
+            Adjust.trackEvent(adjustPurchaseEvent)
+
             Toast.makeText(context, "Pedido realizado com items", Toast.LENGTH_SHORT).show()
         }
     ) {
